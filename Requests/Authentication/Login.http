@@ -1,0 +1,19 @@
+@Host= http://localhost:5073
+
+POST {{Host}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "john.doe@example.com",
+    "password": "Password123!"
+}
+
+### you can also test with invalid credentials
+
+POST {{Host}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "john.doe@example.com",
+    "password": "WrongPassword!"
+}

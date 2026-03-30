@@ -1,0 +1,17 @@
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\bin\Debug\net10.0\BuberDinner.InfraStructure.deps.json
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\bin\Debug\net10.0\BuberDinner.InfraStructure.dll
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\bin\Debug\net10.0\BuberDinner.InfraStructure.pdb
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\obj\Debug\net10.0\BuberDinner.InfraStructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\obj\Debug\net10.0\BuberDinner.InfraStructure.AssemblyInfoInputs.cache
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\obj\Debug\net10.0\BuberDinner.InfraStructure.AssemblyInfo.cs
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\obj\Debug\net10.0\BuberDinner.InfraStructure.csproj.CoreCompileInputs.cache
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\obj\Debug\net10.0\BuberDinner.InfraStructure.dll
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\obj\Debug\net10.0\refint\BuberDinner.InfraStructure.dll
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\obj\Debug\net10.0\BuberDinner.InfraStructure.pdb
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\obj\Debug\net10.0\ref\BuberDinner.InfraStructure.dll
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\bin\Debug\net10.0\BuberDinner.Application.dll
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\bin\Debug\net10.0\BuberDinner.Domain.dll
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\bin\Debug\net10.0\BuberDinner.Application.pdb
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\bin\Debug\net10.0\BuberDinner.Domain.pdb
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\obj\Debug\net10.0\BuberDinner.InfraStructure.csproj.AssemblyReference.cache
+C:\Repos\BuberDinner\BuberDinner\BuberDinner.InfraStructure\obj\Debug\net10.0\BuberDin.DE3B457B.Up2Date
