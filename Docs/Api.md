@@ -1,10 +1,11 @@
 # BuberDinner API Documentation
 
 ## Overview
-BuberDinner is a backend API solution for a dinner management system. This document provides comprehensive information about the API endpoints, authentication, and usage patterns.
+BuberDinner is a backend API solution for a dinner management system, currently in development. This document provides comprehensive information about the API endpoints, authentication, and usage patterns.
 
 ## Table of Contents
 - [Getting Started](#getting-started)
+- [Architecture](#architecture)
 - [Authentication](#authentication)
 - [API Endpoints](#api-endpoints)
 - [Error Handling](#error-handling)
@@ -13,53 +14,82 @@ BuberDinner is a backend API solution for a dinner management system. This docum
 ## Getting Started
 
 ### Prerequisites
-- .NET Core 6.0 or higher
-- SQL Server or compatible database
+- .NET 10.0 or higher
 - API client (Postman, curl, etc.)
 
 ### Environment Setup
-Configure your development environment by setting up the necessary connection strings and API credentials in your configuration files.
+Configure your development environment. The application uses dependency injection and is structured in a clean architecture pattern.
+
+### Running the Application
+1. Navigate to the `BuberDinner.Api` directory
+2. Run `dotnet run`
+3. The API will be available at `https://localhost:5073` (or the port specified in launchSettings.json)
+
+## Architecture
+
+The solution follows Clean Architecture principles with the following layers:
+
+- **BuberDinner.Api**: ASP.NET Core Web API project containing controllers and OpenAPI configuration
+- **BuberDinner.Application**: Application services and business logic
+- **BuberDinner.Contracts**: Request/Response DTOs and contracts
+- **BuberDinner.Domain**: Domain entities and business rules (currently empty)
+- **BuberDinner.InfraStructure**: Infrastructure concerns like data access and external services (minimal implementation)
 
 ## Authentication
 
-The API uses JWT (JSON Web Token) authentication for secure access to protected endpoints.
+The API currently implements basic authentication endpoints. JWT authentication is planned but not yet implemented - the service returns mock tokens.
 
 ### Authentication Flow
 1. User submits credentials to login endpoint
-2. Server returns JWT token
-3. Client includes token in Authorization header for subsequent requests
-4. Token is validated on each protected endpoint
+2. Server returns mock authentication result with dummy token
+3. Client receives authentication response
 
-### Header Format
+### Header Format (Planned)
 ```
 Authorization: Bearer {token}
 ```
 
 ## API Endpoints
 
-### User Management
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login and receive JWT token
-- `GET /api/users/{id}` - Get user details
-- `PUT /api/users/{id}` - Update user information
+### Authentication
+- `POST /auth/register` - Register a new user (mock implementation)
+- `POST /auth/login` - Login and receive mock authentication result
 
-### Dinner Management
-- `GET /api/dinners` - List all dinners
-- `GET /api/dinners/{id}` - Get dinner details
-- `POST /api/dinners` - Create a new dinner
-- `PUT /api/dinners/{id}` - Update dinner details
-- `DELETE /api/dinners/{id}` - Delete a dinner
+### Weather Forecast
+- `GET /weatherforecast` - Get sample weather forecast data (for testing)
 
-### Menu Management
-- `GET /api/menus` - List all menus
-- `GET /api/menus/{id}` - Get menu details
-- `POST /api/menus` - Create a new menu
-- `PUT /api/menus/{id}` - Update menu
+### Request Examples
 
-### Reservations
-- `POST /api/dinners/{dinnerId}/reservations` - Create a reservation
-- `GET /api/dinners/{dinnerId}/reservations` - List dinner reservations
-- `DELETE /api/reservations/{id}` - Cancel a reservation
+#### Register User
+```http
+POST /auth/register
+Content-Type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "password": "Password123!",
+    "confirmPassword": "Password123!"
+}
+```
+
+#### Login User
+```http
+POST /auth/login
+Content-Type: application/json
+
+{
+    "email": "john.doe@example.com",
+    "password": "Password123!"
+}
+```
+
+#### Weather Forecast
+```http
+GET /weatherforecast
+Accept: application/json
+```
 
 ## Error Handling
 
@@ -93,14 +123,26 @@ The API returns standard HTTP status codes and error messages in a consistent fo
 }
 ```
 
-### Paginated Response
+### Authentication Response
 ```json
 {
-  "data": [],
-  "totalCount": 0,
-  "pageNumber": 1,
-  "pageSize": 10
+  "id": "guid",
+  "firstName": "string",
+  "lastName": "string",
+  "email": "string",
+  "token": "string"
 }
+```
+
+### Weather Forecast Response
+```json
+[
+  {
+    "date": "2024-01-01",
+    "temperatureC": 25,
+    "summary": "Warm"
+  }
+]
 ```
 
 ## Development Guidelines
@@ -108,9 +150,8 @@ The API returns standard HTTP status codes and error messages in a consistent fo
 ### Folder Structure
 - `Controllers` - API endpoint handlers
 - `Services` - Business logic layer
-- `Models` - Data models and DTOs
-- `Repositories` - Data access layer
-- `Middleware` - Custom middleware components
+- `Models` - Data models and DTOs (Contracts project)
+- `DependencyInjection` - Service registration
 
 ### Best Practices
 - Use dependency injection for loose coupling
@@ -118,3 +159,10 @@ The API returns standard HTTP status codes and error messages in a consistent fo
 - Follow RESTful conventions
 - Include comprehensive input validation
 - Use DTOs for API responses
+
+### Current Status
+- Authentication endpoints implemented with mock service
+- Weather forecast endpoint for testing
+- Clean architecture structure in place
+- OpenAPI/Swagger enabled for API documentation
+- Domain and Infrastructure layers ready for implementation
