@@ -3,6 +3,8 @@
 ## Overview
 BuberDinner is a backend API solution for a dinner management system, currently in development. This document provides comprehensive information about the API endpoints, authentication, and usage patterns.
 
+The solution is built using .NET 10.0 and follows Clean Architecture principles. The project uses the modern `.slnx` solution file format for simplified project management.
+
 ## Table of Contents
 - [Getting Started](#getting-started)
 - [Architecture](#architecture)
@@ -14,16 +16,34 @@ BuberDinner is a backend API solution for a dinner management system, currently 
 ## Getting Started
 
 ### Prerequisites
-- .NET 10.0 or higher
+- .NET 10.0 SDK or higher
 - API client (Postman, curl, etc.)
+
+### Dependencies
+The solution uses the following key packages:
+- `Microsoft.AspNetCore.OpenApi` (10.0.5) - For OpenAPI/Swagger documentation
+- `Microsoft.VisualStudio.Web.CodeGeneration.Design` (10.0.2) - For code generation tools
 
 ### Environment Setup
 Configure your development environment. The application uses dependency injection and is structured in a clean architecture pattern.
 
+### Building the Solution
+1. Ensure you have .NET 10.0 SDK installed
+2. Run `dotnet build` from the solution root or `BuberDinner.Api` directory
+3. The build should complete successfully with no errors
+
 ### Running the Application
 1. Navigate to the `BuberDinner.Api` directory
 2. Run `dotnet run`
-3. The API will be available at `https://localhost:5073` (or the port specified in launchSettings.json)
+3. The API will be available at `http://localhost:5073` (HTTP) or `https://localhost:7077` (HTTPS)
+4. OpenAPI/Swagger documentation available at `http://localhost:5073/openapi/v1.json` or `https://localhost:7077/openapi/v1.json`
+
+### Testing the API
+Use the provided `.http` files in the `Requests` folder for testing:
+- `Requests/Authentication/Register.http` - Test user registration
+- `Requests/Authentication/Login.http` - Test user login
+
+These files can be executed directly in VS Code or imported into tools like Postman.
 
 ## Architecture
 
@@ -55,9 +75,6 @@ Authorization: Bearer {token}
 - `POST /auth/register` - Register a new user (mock implementation)
 - `POST /auth/login` - Login and receive mock authentication result
 
-### Weather Forecast
-- `GET /weatherforecast` - Get sample weather forecast data (for testing)
-
 ### Request Examples
 
 #### Register User
@@ -83,12 +100,6 @@ Content-Type: application/json
     "email": "john.doe@example.com",
     "password": "Password123!"
 }
-```
-
-#### Weather Forecast
-```http
-GET /weatherforecast
-Accept: application/json
 ```
 
 ## Error Handling
@@ -134,17 +145,6 @@ The API returns standard HTTP status codes and error messages in a consistent fo
 }
 ```
 
-### Weather Forecast Response
-```json
-[
-  {
-    "date": "2024-01-01",
-    "temperatureC": 25,
-    "summary": "Warm"
-  }
-]
-```
-
 ## Development Guidelines
 
 ### Folder Structure
@@ -162,7 +162,6 @@ The API returns standard HTTP status codes and error messages in a consistent fo
 
 ### Current Status
 - Authentication endpoints implemented with mock service
-- Weather forecast endpoint for testing
 - Clean architecture structure in place
 - OpenAPI/Swagger enabled for API documentation
 - Domain and Infrastructure layers ready for implementation
