@@ -2,17 +2,29 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using BuberDinner.Application.Common.Interfaces.Authentication;
+using BuberDinner.Application.Common.Interfaces.Services;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BuberDinner.InfraStructure.Authentication;
 
 public class JWTTokenGenerator : IJWTTokenGenerator
 {
+    private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly JwtSettings _jwtSettings;
+
+    public JWTTokenGenerator(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtOptions)
+    {
+        _dateTimeProvider = dateTimeProvider;
+        _jwtSettings = jwtOptions.Value;
+    }
+
+
     public string GenerateToken(Guid userId, string firstName, string lastName)
     {
         // Implementation for generating JWT token
         var signingCredentials = new SigningCredentials(
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key")),
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
             SecurityAlgorithms.HmacSha256);
         var claims = new[]
         {
@@ -22,7 +34,12 @@ public class JWTTokenGenerator : IJWTTokenGenerator
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var securityToken = new JwtSecurityToken(issuer: "BuberDinner",expires:DateTime.Now.AddDays(1), claims: claims, signingCredentials: signingCredentials);
+        var securityToken = new JwtSecurityToken
+        (issuer: _jwtSettings.Issuer,
+         audience: _jwtSettings.Audience,
+         expires:_dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes),
+         claims: claims,
+         signingCredentials: signingCredentials);
         return new JwtSecurityTokenHandler().WriteToken(securityToken);
     }
 }
