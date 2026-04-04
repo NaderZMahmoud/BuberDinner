@@ -50,21 +50,36 @@ These files can be executed directly in VS Code or imported into tools like Post
 The solution follows Clean Architecture principles with the following layers:
 
 - **BuberDinner.Api**: ASP.NET Core Web API project containing controllers and OpenAPI configuration
-- **BuberDinner.Application**: Application services and business logic
+- **BuberDinner.Application**: Application services and business logic (includes authentication service and interfaces)
 - **BuberDinner.Contracts**: Request/Response DTOs and contracts
-- **BuberDinner.Domain**: Domain entities and business rules (currently empty)
-- **BuberDinner.InfraStructure**: Infrastructure concerns like data access and external services (minimal implementation)
+- **BuberDinner.Domain**: Domain entities including `User` and business rules
+- **BuberDinner.InfraStructure**: Infrastructure concerns including:
+  - JWT token generation with configuration-based secrets
+  - User persistence repository
+  - DateTime provider service
+  - Database abstraction layer
 
 ## Authentication
 
-The API currently implements basic authentication endpoints. JWT authentication is planned but not yet implemented - the service returns mock tokens.
+The API implements JWT (JSON Web Token) authentication with user persistence.
 
 ### Authentication Flow
-1. User submits credentials to login endpoint
-2. Server returns mock authentication result with dummy token
-3. Client receives authentication response
+1. **Register**: User submits credentials to register a new account
+   - Server validates that user doesn't already exist by email
+   - Creates new `User` entity and persists to database
+   - Generates JWT token signed with HS256
+   - Returns user info with token
+2. **Login**: User submits email and password
+   - Server validates credentials against stored user
+   - Generates new JWT token
+   - Returns user info with token
 
-### Header Format (Planned)
+### JWT Configuration
+- Algorithm: HS256 (HMAC SHA-256)
+- Secret: Configured in `appsettings.json` under `Jwt:Secret`
+- Expiration: 1 day
+
+### Header Format
 ```
 Authorization: Bearer {token}
 ```
@@ -161,7 +176,26 @@ The API returns standard HTTP status codes and error messages in a consistent fo
 - Use DTOs for API responses
 
 ### Current Status
-- Authentication endpoints implemented with mock service
-- Clean architecture structure in place
-- OpenAPI/Swagger enabled for API documentation
-- Domain and Infrastructure layers ready for implementation
+- ✅ Authentication endpoints fully implemented (Register & Login)
+- ✅ JWT token generation with HS256 signing
+- ✅ User persistence with repository pattern
+- ✅ User duplicate detection by email
+- ✅ Clean architecture structure implemented
+- ✅ OpenAPI/Swagger enabled for API documentation
+- ✅ Domain entities implemented (User)
+- ✅ Infrastructure layer with repositories and services
+- ✅ Dependency injection fully configured
+
+### Configuration
+JWT settings can be configured in `appsettings.json`:
+```json
+{
+  "Jwt": {
+    "Secret": "your-secret-key-here",
+    "Issuer": "BuberDinner",
+    "Audience": "BuberDinner"
+  }
+}
+```
+
+**Important**: The secret must be at least 128 bits (16 characters) for HS256 algorithm.
