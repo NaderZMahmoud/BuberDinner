@@ -1,5 +1,6 @@
 using BuberDinner.Application;
 using BuberDinner.InfraStructure;
+using BuberDinner.Api.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -9,7 +10,10 @@ builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
 builder.Services.AddOpenApi();
-builder.Services.AddControllers();
+builder.Services.AddControllers(Options =>
+{
+    Options.Filters.Add<ErrorHandlingFilterAttibute>();
+});
 }
 
 var app = builder.Build();
