@@ -3,6 +3,8 @@ using BuberDinner.Contracts.Authentication;
 using BuberDinner.Application.Services.Authentication;
 using ErrorOr;
 using BuberDinner.Domain.Common.Errors;
+using BuberDinner.Application.Services.Authentication.Commands;
+using BuberDinner.Application.Services.Authentication.Queries;
 
 namespace   BuberDinner.Api.Controllers;
 
@@ -10,16 +12,18 @@ namespace   BuberDinner.Api.Controllers;
 [Route("auth")]
 public class AuthenticationController : ApiController
 {
-    private readonly IAuthenticationService _authenticationService;
+    private readonly IAuthenticationCommandService _authenticationCommandService;
+    private readonly IAuthenticationQueryService _authenticationQueryService;
 
-    public AuthenticationController(IAuthenticationService authenticationService)
+    public AuthenticationController(IAuthenticationCommandService authenticationCommandService, IAuthenticationQueryService authenticationQueryService)
     {
-        _authenticationService = authenticationService;
+        _authenticationCommandService = authenticationCommandService;
+        _authenticationQueryService = authenticationQueryService;
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest request)
     {
-        var result = await _authenticationService.Register(
+        var result = await _authenticationCommandService.Register(
             request.FirstName,
             request.LastName,
             request.Email,
@@ -44,7 +48,7 @@ public class AuthenticationController : ApiController
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        var result = await _authenticationService.Login(
+        var result = await _authenticationQueryService.Login(
             request.Email,
             request.Password);
 

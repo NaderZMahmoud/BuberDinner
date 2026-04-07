@@ -5,14 +5,14 @@ using BuberDinner.Domain.Entities;
 using BuberDinner.Domain.Common.Errors;
 using ErrorOr;
 
-namespace BuberDinner.Application.Services.Authentication;
+namespace BuberDinner.Application.Services.Authentication.Commands;
 
-public class AuthenticationService : IAuthenticationService
+public class AuthenticationCommandService : IAuthenticationCommandService
 {
     private readonly IJWTTokenGenerator _jwtTokenGenerator;
     private readonly IUserRepository _userRepository;
 
-    public AuthenticationService(IJWTTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
+    public AuthenticationCommandService(IJWTTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
         _userRepository = userRepository;
@@ -36,26 +36,6 @@ public class AuthenticationService : IAuthenticationService
             Password = password // In a real implementation, the password should be hashed
         };
         await _userRepository.AddUserAsync(user);
-
-        //3. Create JWT token
-        var token = _jwtTokenGenerator.GenerateToken(user);
-        return new AuthenticationResult(
-            user,
-            token);
-    }
-    public async Task<ErrorOr<AuthenticationResult>> Login(string email, string password)
-    {
-        //1. Check if user exists
-        if (_userRepository.GetUserByEmailAsync(email).Result is not User user)
-        {
-            return Errors.Authintication.InvalidCredentials;
-        }
-        
-        //2. Validate password
-        if (user.Password != password)
-        {
-            return Errors.Authintication.InvalidCredentials;
-        }
 
         //3. Create JWT token
         var token = _jwtTokenGenerator.GenerateToken(user);
