@@ -6,6 +6,7 @@ using BuberDinner.Domain.Common.Errors;
 using MediatR;
 using BuberDinner.Application.Authentication.Commands.Register;
 using BuberDinner.Application.Authentication.Queries.Login;
+using MapsterMapper;
 
 namespace   BuberDinner.Api.Controllers;
 
@@ -14,46 +15,31 @@ namespace   BuberDinner.Api.Controllers;
 public class AuthenticationController : ApiController
 {
     private readonly ISender _mediator;
+    private readonly IMapper _mapper;
 
-    public AuthenticationController(ISender mediator)
+    public AuthenticationController(ISender mediator, IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest request)
     {
-        var command = new RegisterCommand(
-            request.FirstName,
-            request.LastName,
-            request.Email,
-            request.Password);
+        var command = _mapper.Map<RegisterCommand>(request);
         var result = await _mediator.Send(command);
 
         return result.Match(
-                    authResult =>Ok(NewMethod(result.Value)),
+                    authResult =>Ok(_mapper.Map<AuthenticationResponse>(result.Value)),
                     errors =>Problem(errors));
-    }
-
-    private IActionResult NewMethod(AuthenticationResult result)
-    {
-        var response = new AuthenticationResponse(
-                result.User.Id,
-                result.User.FirstName,
-                result.User.LastName,
-                result.User.Email,
-                result.Token);
-        return Ok(response);
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        var loginQuery = new LoginQuery(
-            request.Email,
-            request.Password);
+        var loginQuery = _mapper.Map<LoginQuery>(request);
         var result = await _mediator.Send(loginQuery);
 
-            if(result.IsError && result.FirstError == Errors.Authintication.InvalidCredentials)
+            if(result.IsError && result.FirstError == Errors.Authentication.InvalidCredentials)
             {
                 var errors = result.Errors;
                 return Problem(statusCode: StatusCodes.Status401Unauthorized, title: errors[0].Description);
