@@ -1,3 +1,6 @@
+using System.Reflection;
+using BuberDinner.Application.Authentication.Commands.Register;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +12,8 @@ public static class DependencyInjection
     {
         services.AddMediatR(config =>
             config.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
+
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         return services;
     }
 }
